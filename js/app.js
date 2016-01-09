@@ -41,7 +41,7 @@ var ViewModel = function() {
       });
 	}
 	initializeMap();
-  }
+  };
 };
 
 ko.applyBindings(new ViewModel());
@@ -66,7 +66,7 @@ function initializeMap() {
   */
   map = new google.maps.Map(document.querySelector('#map'), mapOptions);
   //Gets li element by class
-  var markerLi = document.querySelector('.marker')
+  var markerLi = document.querySelector('.marker');
   
   /*
   createMapMarker(placeData) reads Google Places search results to create map pins.
