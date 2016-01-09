@@ -81,18 +81,36 @@ function initializeMap() {
 	var name = placeData.name; //find name of place
     var address = placeData.formatted_address;   // address of the place from the place service
 	var bounds = window.mapBounds;            // current boundaries of the map window
-  
+    
     // marker is an object with additional data about the pin for a single location
     var marker = new google.maps.Marker({
       map: map,
       position: placeData.geometry.location,
       title: name
     });
+	//Added wikipedia api call
+	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+name+'&format=json&callback=wikiCallback';
+	var articles;
+	var artc;
+	var web_url;
+	$.ajax({
+    url: wikiUrl,
+    dataType: 'jsonp',
+    headers: { 'Api-User-Agent': 'Example/1.0' },
+    success: function(data) {
+	  var articles = data[1];
+	  for(var i = 0; i < articles.length; i++){
+	    artc = articles[i];
+	    web_url = 'https://en.wikipedia.org/wiki/' + artc;
+		name = name + web_url;
+	  }
+	}
+	});
     // infoWindows are the little helper windows that open when you click
     // or hover over a pin on a map. They usually contain more information
     // about a location.
     var infoWindow = new google.maps.InfoWindow({
-      content: name + ' ' + address
+      content: name + ' ' + address + '<br>' + web_url
     });
 	//add event listener to open info Window when a map marker is clicked
 	marker.addListener('click', function() {
