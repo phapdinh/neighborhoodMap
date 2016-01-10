@@ -25,10 +25,10 @@ var ViewModel = function() {
   //filters locations by filter observable
   this.filterLocations = function() {
 	this.mapMarkerList.removeAll();
-	if(self.filter().length !== 0) {
+	if(self.filter().length > 0) {
 	  locationsDisplay = [];
-      locations.forEach(function(name) {
-        if(name.search(self.filter()) !== -1) {
+	  locations.forEach(function(name) {
+        if(name.toLowerCase().search(self.filter().toLowerCase()) !== -1) {
 	      locationsDisplay.push(name);
 		  self.mapMarkerList.push(new mapMarker(name));
 	    }
@@ -67,7 +67,6 @@ function initializeMap() {
   map = new google.maps.Map(document.querySelector('#map'), mapOptions);
   //Gets li element by class
   var markerLi = document.querySelector('.marker');
-  
   /*
   createMapMarker(placeData) reads Google Places search results to create map pins.
   placeData is the object returned from search results containing information
@@ -81,18 +80,17 @@ function initializeMap() {
 	var name = placeData.name; //find name of place
     var address = placeData.formatted_address;   // address of the place from the place service
 	var bounds = window.mapBounds;            // current boundaries of the map window
-    
+    var infoWindow; //create infoWindow variable
     // marker is an object with additional data about the pin for a single location
     var marker = new google.maps.Marker({
       map: map,
       position: placeData.geometry.location,
-      title: name
+      title: name,
+	  animation: null
     });
 	//Added wikipedia api call
 	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+name+'&format=json&callback=wikiCallback';
-	var articles;
-	var artc;
-	var web_url;
+	var infoContent = name + ' ' + address;
 	$.ajax({
     url: wikiUrl,
     dataType: 'jsonp',
@@ -100,18 +98,19 @@ function initializeMap() {
     success: function(data) {
 	  var articles = data[1];
 	  for(var i = 0; i < articles.length; i++){
-	    artc = articles[i];
-	    web_url = 'https://en.wikipedia.org/wiki/' + artc;
-		name = name + web_url;
+		var artc = articles[i];
+		var web_url = 'https://en.wikipedia.org/wiki/' + artc;
+		infoContent = infoContent + '<br>' +
+		'<a href="'+ web_url +'">' +
+		artc +'</a>'
 	  }
-	}
-	});
-    // infoWindows are the little helper windows that open when you click
-    // or hover over a pin on a map. They usually contain more information
-    // about a location.
-    var infoWindow = new google.maps.InfoWindow({
-      content: name + ' ' + address + '<br>' + web_url
-    });
+	  // infoWindows are the little helper windows that open when you click
+      // or hover over a pin on a map. They usually contain more information
+      // about a location.
+      infoWindow = new google.maps.InfoWindow({
+        content: infoContent
+      }); 
+	}});
 	//add event listener to open info Window when a map marker is clicked
 	marker.addListener('click', function() {
       infoWindow.open(map, marker);
@@ -136,6 +135,8 @@ function initializeMap() {
     bounds.extend(new google.maps.LatLng(lat, lon));
     // fit the map to the new marker
     map.fitBounds(bounds);
+	// center the map
+    map.setCenter(bounds.getCenter());
   }
   
   
