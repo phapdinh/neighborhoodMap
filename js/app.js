@@ -13,6 +13,10 @@ var locationsDisplay = locations.slice(0);
 //Controller
 var mapMarker = function(name) {
   this.name = ko.observable(name);
+  this.openWindow = function(mark) {
+	console.log(mark.name());
+    infoWindowObject[mark.name()].open(map, markerObject[mark.name()]);
+  }
 };
 //View
 var ViewModel = function() {
@@ -48,6 +52,10 @@ ko.applyBindings(new ViewModel());
 
 // declares a global map variable
 var map;
+// declares object array of markers
+var markerObject = {};
+//create infoWindow object variable
+var infoWindowObject = {};
 /*
 Got this code from the Front End Nanodegree Resume project
 initializeMap() is called when page is loaded.
@@ -65,8 +73,6 @@ function initializeMap() {
   appended to #mapDiv in resumeBuilder.js. 
   */
   map = new google.maps.Map(document.querySelector('#map'), mapOptions);
-  //Gets li element by class
-  var markerLi = document.querySelector('.marker');
   /*
   createMapMarker(placeData) reads Google Places search results to create map pins.
   placeData is the object returned from search results containing information
@@ -80,7 +86,7 @@ function initializeMap() {
 	var name = placeData.name; //find name of place
     var address = placeData.formatted_address;   // address of the place from the place service
 	var bounds = window.mapBounds;            // current boundaries of the map window
-    var infoWindow; //create infoWindow variable
+	var infoWindow; // create infoWindow variable
     // marker is an object with additional data about the pin for a single location
     var marker = new google.maps.Marker({
       map: map,
@@ -88,14 +94,15 @@ function initializeMap() {
       title: name,
 	  animation: null
     });
+	markerObject[name] = marker;
 	//Added wikipedia api call
 	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+name+'&format=json&callback=wikiCallback';
 	var infoContent = name + ' ' + address;
 	$.ajax({
-    url: wikiUrl,
-    dataType: 'jsonp',
-    headers: { 'Api-User-Agent': 'Example/1.0' },
-    success: function(data) {
+      url: wikiUrl,
+      dataType: 'jsonp',
+      headers: { 'Api-User-Agent': 'Example/1.0' }
+	}).done(function(data) {
 	  var articles = data[1];
 	  for(var i = 0; i < articles.length; i++){
 		var artc = articles[i];
@@ -109,19 +116,13 @@ function initializeMap() {
       // about a location.
       infoWindow = new google.maps.InfoWindow({
         content: infoContent
-      }); 
-	}});
+      });
+	  infoWindowObject[name] = infoWindow;
+	}).fail(function() {
+      alert( "Wiki API call failed!" );
+    });
 	//add event listener to open info Window when a map marker is clicked
 	marker.addListener('click', function() {
-      infoWindow.open(map, marker);
-	  if (marker.getAnimation() !== null) {
-        marker.setAnimation(null);
-      } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      }
-    });
-	//Added event listener to open info Window and bounce when marker li is clicked
-	markerLi.addEventListener('click', function() {
       infoWindow.open(map, marker);
 	  if (marker.getAnimation() !== null) {
         marker.setAnimation(null);
