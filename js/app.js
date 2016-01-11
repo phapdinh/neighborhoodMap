@@ -166,8 +166,14 @@ var mapMarker = function(name) {
   this.openWindow = function(mark) {
 	Object.keys(infoWindowObject).forEach(function(name) {
 	  infoWindowObject[name].close();
+	  markerObject[name].setAnimation(null);
 	});
     infoWindowObject[mark.name()].open(map, markerObject[mark.name()]);
+	if (markerObject[name].getAnimation() !== null) {
+      markerObject[name].setAnimation(null);
+    } else {
+      markerObject[name].setAnimation(google.maps.Animation.BOUNCE);
+    }
   };
 };
 //View
