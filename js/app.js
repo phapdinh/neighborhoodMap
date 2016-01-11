@@ -150,7 +150,7 @@ function initializeMap() {
 
   // pinPoster(locations) creates pins on the map for each location in
   // the locations array
-  pinPoster(locationsDisplay);
+  pinPoster(locations);
 }
 
 // Vanilla JS way to listen for resizing of the window
@@ -172,7 +172,7 @@ var mapMarker = function(name) {
 var ViewModel = function() {
   var self = this;
   this.mapMarkerList = ko.observableArray([]);
-  locationsDisplay.forEach(function(name) {
+  locations.forEach(function(name) {
     self.mapMarkerList.push(new mapMarker(name));
   });
   this.filter = ko.observable('');
@@ -180,24 +180,22 @@ var ViewModel = function() {
   this.filterLocations = function() {
 	if(self.filter().length > 0) {
 	  this.mapMarkerList.removeAll();
-	  locationsDisplay = [];
 	  locations.forEach(function(name) {
-        if(name.toLowerCase().search(self.filter().toLowerCase()) !== -1) {
-	      locationsDisplay.push(name);
+        if(name.toLowerCase().search(self.filter().toLowerCase()) > -1) {
 		  self.mapMarkerList.push(new mapMarker(name));
+		  markerObject[name].setMap(map);
 	    }
+		else {
+		  markerObject[name].setMap(null);
+		}
       });
-	  initializeMap();
 	}
 	else {
-      if(locationsDisplay.length !== locations.length) {
-	    this.mapMarkerList.removeAll();
-	    locationsDisplay = locations.slice(0);
-	    locationsDisplay.forEach(function(name) {
-          self.mapMarkerList.push(new mapMarker(name));
-        });
-	    initializeMap();
-	  }
+	  this.mapMarkerList.removeAll();
+	  locations.forEach(function(name) {
+        self.mapMarkerList.push(new mapMarker(name));
+		markerObject[name].setMap(map);
+      });
 	}
   };
 };
