@@ -10,46 +10,6 @@ var locations = [
 ];
 //Array of markers to display
 var locationsDisplay = locations.slice(0);
-//Controller
-var mapMarker = function(name) {
-  this.name = ko.observable(name);
-  this.openWindow = function(mark) {
-	console.log(mark.name());
-    infoWindowObject[mark.name()].open(map, markerObject[mark.name()]);
-  }
-};
-//View
-var ViewModel = function() {
-  var self = this;
-  this.mapMarkerList = ko.observableArray([]);
-  locationsDisplay.forEach(function(name) {
-    self.mapMarkerList.push(new mapMarker(name));
-  });
-  this.filter = ko.observable('');
-  //filters locations by filter observable
-  this.filterLocations = function() {
-	this.mapMarkerList.removeAll();
-	if(self.filter().length > 0) {
-	  locationsDisplay = [];
-	  locations.forEach(function(name) {
-        if(name.toLowerCase().search(self.filter().toLowerCase()) !== -1) {
-	      locationsDisplay.push(name);
-		  self.mapMarkerList.push(new mapMarker(name));
-	    }
-      });
-	}
-	else {
-	  locationsDisplay = locations.slice(0);
-	  locationsDisplay.forEach(function(name) {
-        self.mapMarkerList.push(new mapMarker(name));
-      });
-	}
-	initializeMap();
-  };
-};
-
-ko.applyBindings(new ViewModel());
-
 // declares a global map variable
 var map;
 // declares object array of markers
@@ -81,12 +41,18 @@ function initializeMap() {
   function createMapMarker(placeData) {
 
     // The next lines save location data from the search result object to local variables
-    var lat = placeData.geometry.location.lat();  // latitude from the place service
-    var lon = placeData.geometry.location.lng();  // longitude from the place service
-	var name = placeData.name; //find name of place
-    var address = placeData.formatted_address;   // address of the place from the place service
-	var bounds = window.mapBounds;            // current boundaries of the map window
-	var infoWindow; // create infoWindow variable
+    // latitude from the place service
+	var lat = placeData.geometry.location.lat();
+	// longitude from the place service
+    var lon = placeData.geometry.location.lng();
+	// find name of place
+	var name = placeData.name;
+	// address of the place from the place service
+    var address = placeData.formatted_address;
+	// current boundaries of the map window
+	var bounds = window.mapBounds;
+	// create infoWindow variable
+	var infoWindow;
     // marker is an object with additional data about the pin for a single location
     var marker = new google.maps.Marker({
       map: map,
@@ -98,6 +64,10 @@ function initializeMap() {
 	//Added wikipedia api call
 	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+name+'&format=json&callback=wikiCallback';
 	var infoContent = name + ' ' + address;
+	var wikiRequestTimeOut = setTimeout(function() {
+	  alert( "Wiki API call failed!");
+	},8000); 
+	
 	$.ajax({
       url: wikiUrl,
       dataType: 'jsonp',
@@ -109,7 +79,7 @@ function initializeMap() {
 		var web_url = 'https://en.wikipedia.org/wiki/' + artc;
 		infoContent = infoContent + '<br>' +
 		'<a href="'+ web_url +'">' +
-		artc +'</a>'
+		artc +'</a>';
 	  }
 	  // infoWindows are the little helper windows that open when you click
       // or hover over a pin on a map. They usually contain more information
@@ -118,9 +88,8 @@ function initializeMap() {
         content: infoContent
       });
 	  infoWindowObject[name] = infoWindow;
-	}).fail(function() {
-      alert( "Wiki API call failed!" );
-    });
+	  clearTimeout(wikiRequestTimeOut);
+	});
 	//add event listener to open info Window when a map marker is clicked
 	marker.addListener('click', function() {
       infoWindow.open(map, marker);
@@ -184,12 +153,53 @@ function initializeMap() {
   pinPoster(locationsDisplay);
 }
 
-// Calls the initializeMap() function when the page loads
-window.addEventListener('load', initializeMap);
-
 // Vanilla JS way to listen for resizing of the window
 // and adjust map bounds
 window.addEventListener('resize', function(e) {
   //Make sure the map bounds get updated on page resize
   map.fitBounds(mapBounds);
 });
+
+//Controller
+var mapMarker = function(name) {
+  this.name = ko.observable(name);
+  this.openWindow = function(mark) {
+	console.log(mark.name());
+    infoWindowObject[mark.name()].open(map, markerObject[mark.name()]);
+  };
+};
+//View
+var ViewModel = function() {
+  var self = this;
+  this.mapMarkerList = ko.observableArray([]);
+  locationsDisplay.forEach(function(name) {
+    self.mapMarkerList.push(new mapMarker(name));
+  });
+  this.filter = ko.observable('');
+  //filters locations by filter observable
+  this.filterLocations = function() {
+	if(self.filter().length > 0) {
+	  this.mapMarkerList.removeAll();
+	  locationsDisplay = [];
+	  locations.forEach(function(name) {
+        if(name.toLowerCase().search(self.filter().toLowerCase()) !== -1) {
+	      locationsDisplay.push(name);
+		  self.mapMarkerList.push(new mapMarker(name));
+	    }
+      });
+	  initializeMap();
+	}
+	else {
+      if(locationsDisplay.length !== locations.length) {
+	    this.mapMarkerList.removeAll();
+	    locationsDisplay = locations.slice(0);
+	    locationsDisplay.forEach(function(name) {
+          self.mapMarkerList.push(new mapMarker(name));
+        });
+	    initializeMap();
+	  }
+	}
+  };
+};
+
+ko.applyBindings(new ViewModel());
