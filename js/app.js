@@ -164,7 +164,9 @@ window.addEventListener('resize', function(e) {
 var mapMarker = function(name) {
   this.name = ko.observable(name);
   this.openWindow = function(mark) {
-	console.log(mark.name());
+	Object.keys(infoWindowObject).forEach(function(name) {
+	  infoWindowObject[name].close();
+	});
     infoWindowObject[mark.name()].open(map, markerObject[mark.name()]);
   };
 };
