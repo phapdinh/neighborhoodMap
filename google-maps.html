@@ -7,20 +7,20 @@
   </head>
   <body>
     <!--Used https://github.com/reivaj05/KnockOutJS-GoogleMaps which I found on the discussion forum-->
-    <input class='float' data-bind="textInput: filter, event: {keyup: filterLocations}" placeholder="Filter">
-	<ul class='floatlist' data-bind='foreach: mapMarkerList'>
+    <input id='float' data-bind="textInput: filter, event: {keyup: filterLocations}" placeholder="Filter">
+	<ul id='floatlist' data-bind='foreach: mapMarkerList'>
 	  <li class='marker' data-bind='text: name, click: openWindow'></li>
 	</ul>
     <div id='map'></div>
 	<style>
-	  .float {
-	    position: absolute;
-		top: 50px;
-		z-index: 5;
-	  }
-	  .floatlist {
+	  #float {
 	    position: absolute;
 		top: 60px;
+		z-index: 5;
+	  }
+	  #floatlist {
+	    position: absolute;
+		top: 70px;
 		z-index: 5;
 		background: white;
 	  }
