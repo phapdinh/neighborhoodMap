@@ -6,7 +6,9 @@ var locations = [
   'World of Coca-Cola',
   'Georgia Dome',
   'Piedmont Park',
-  'Zoo Atlanta'
+  'Zoo Atlanta',
+  'Georgia Aquarium',
+  'Turner Field'
 ];
 //Array of markers to display
 var locationsDisplay = locations.slice(0);
@@ -98,6 +100,10 @@ function initializeMap() {
       } else {
         marker.setAnimation(google.maps.Animation.BOUNCE);
       }
+	  //sets Timeout to stop marker bounce after 5 seconds
+	  window.setTimeout(function() {
+        marker.setAnimation(null);  
+      }, 5000);
     });
 	
 	// this is where the pin actually gets added to the map.
