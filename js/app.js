@@ -10,6 +10,8 @@ var locations = [
   'Georgia Aquarium',
   'Turner Field'
 ];
+//sorts array alphabetically
+locations.sort();
 //Array of markers to display
 var locationsDisplay = locations.slice(0);
 // declares a global map variable
@@ -100,10 +102,10 @@ function initializeMap() {
       } else {
         marker.setAnimation(google.maps.Animation.BOUNCE);
       }
-	  //sets Timeout to stop marker bounce after 5 seconds
+	  //sets Timeout to stop marker bounce after 4 seconds
 	  window.setTimeout(function() {
         marker.setAnimation(null);  
-      }, 5000);
+      }, 4000);
     });
 	
 	// this is where the pin actually gets added to the map.
@@ -166,13 +168,17 @@ window.addEventListener('resize', function(e) {
   map.fitBounds(mapBounds);
 });
 
+//Alerts when google api fails to load
+function googleError() {
+  alert('Google Map API failed to load');
+}
+
 //Controller
 var mapMarker = function(name) {
   this.name = ko.observable(name);
   this.openWindow = function(mark) {
 	Object.keys(infoWindowObject).forEach(function(name) {
 	  infoWindowObject[name].close();
-	  markerObject[name].setAnimation(null);
 	});
     infoWindowObject[mark.name()].open(map, markerObject[mark.name()]);
   };
