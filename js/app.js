@@ -96,6 +96,10 @@ function initializeMap() {
 	});
 	//add event listener to open info Window when a map marker is clicked
 	marker.addListener('click', function() {
+	  //Closes all open info windows
+	  Object.keys(infoWindowObject).forEach(function(name) {
+	  infoWindowObject[name].close();
+	  });
       infoWindow.open(map, marker);
 	  if (marker.getAnimation() !== null) {
         marker.setAnimation(null);
