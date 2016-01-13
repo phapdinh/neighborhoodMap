@@ -20,6 +20,10 @@ var map;
 var markerObject = {};
 //create infoWindow object variable
 var infoWindowObject = {};
+//creates alert if wiki api call doesn't come up in time
+var wikiRequestTimeOut = setTimeout(function() {
+  alert( "Wiki API call failed!");
+},8000); 
 /*
 Got this code from the Front End Nanodegree Resume project
 initializeMap() is called when page is loaded.
@@ -68,10 +72,6 @@ function initializeMap() {
 	//Added wikipedia api call
 	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+name+'&format=json&callback=wikiCallback';
 	var infoContent = name + ' ' + address;
-	var wikiRequestTimeOut = setTimeout(function() {
-	  alert( "Wiki API call failed!");
-	},8000); 
-	
 	$.ajax({
       url: wikiUrl,
       dataType: 'jsonp',
