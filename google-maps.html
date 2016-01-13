@@ -5,18 +5,26 @@
 	<meta name="viewport" content="width=device-width">
 	<title>Neighborhood Map</title>
 	<style>
-	  #float {
+	  .float {
 	    position: absolute;
 		top: 60px;
 		left: 20px;
 		z-index: 5;
 	  }
-	  #floatlist {
+	  .floatList {
 	    position: absolute;
 		top: 70px;
 		left: 20px;
 		z-index: 5;
 		background: white;
+	  }
+	  @media screen and (max-width: 1000px) {
+	    .float{
+	      position: static;
+		}
+		.floatList {
+		 position: static;
+		}
 	  }
       #map {
         width: 100%;
@@ -26,14 +34,14 @@
   </head>
   <body>
     <!--Used https://github.com/reivaj05/KnockOutJS-GoogleMaps which I found on the discussion forum-->
-    <input id='float' data-bind="textInput: filter, event: {keyup: filterLocations}" placeholder="Filter">
-	<ul id='floatlist' data-bind='foreach: mapMarkerList'>
+    <input class='float' data-bind="textInput: filter, event: {keyup: filterLocations}" placeholder="Filter">
+	<ul class='floatList' data-bind='foreach: mapMarkerList'>
 	  <li class='marker' data-bind='text: name, click: openWindow'></li>
 	</ul>
     <div id='map'></div>
 	<script src="js/libs/jquery.min.js"></script>
 	<script src="js/libs/knockout-3.2.0.js"></script>
-	<script async src="htt://maps.googleapis.com/maps/api/js?libraries=places&amp;language=en-US&callback=initializeMap" onerror="googleError()"></script>
-	<script async src="js/app.js"></script>
+	<script src="js/app.js"></script>
+	<script async defer src="http://maps.googleapis.com/maps/api/js?libraries=places&amp;language=en-US&callback=initializeMap" onerror="googleError()"></script>
   </body>
 </html>

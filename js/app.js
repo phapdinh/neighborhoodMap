@@ -71,7 +71,7 @@ function initializeMap() {
 	markerObject[name] = marker;
 	//Added wikipedia api call
 	var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+name+'&format=json&callback=wikiCallback';
-	var infoContent = name + ' ' + address;
+	var infoContent = name + '<br>' + address;
 	$.ajax({
       url: wikiUrl,
       dataType: 'jsonp',
