@@ -23,7 +23,7 @@ var infoWindowObject = {};
 //creates alert if wiki api call doesn't come up in time
 var wikiRequestTimeOut = setTimeout(function() {
   alert( "Wiki API call failed!");
-},8000); 
+},8000);
 /*
 Got this code from the Front End Nanodegree Resume project
 initializeMap() is called when page is loaded.

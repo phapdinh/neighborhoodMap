@@ -7,32 +7,28 @@
 	<style>
 	  .float {
 	    position: absolute;
-		top: 60px;
-		left: 20px;
+		top: 130px;
 		z-index: 5;
+		float: left;
+		width: 20%;
 	  }
 	  .floatList {
 	    position: absolute;
-		top: 70px;
-		left: 20px;
+		top: 150px;
 		z-index: 5;
-		background: white;
-	  }
-	  @media screen and (max-width: 1000px) {
-	    .float{
-	      position: static;
-		}
-		.floatList {
-		  position: static;
-		}
+		float: left;
+		width: 20%;
+		left: -10px;
 	  }
       #map {
-        width: 100%;
+        width: 70%;
 		height: 600px;
+		float: right;
       }
     </style>
   </head>
   <body>
+    <h1>Atlanta, Georgia Tourist Attractions</h1>
     <!--Used https://github.com/reivaj05/KnockOutJS-GoogleMaps which I found on the discussion forum-->
     <input class='float' data-bind="textInput: filter, event: {keyup: filterLocations}" placeholder="Filter">
 	<ul class='floatList' data-bind='foreach: mapMarkerList'>
