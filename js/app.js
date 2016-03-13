@@ -8,7 +8,7 @@ var locations = [
   'Zoo Atlanta',
   'Georgia Aquarium',
   'Turner Field',
-  'Chastain Park'
+  'Fernbank Museum of Natural History'
 ];
 
 //sorts array alphabetically
