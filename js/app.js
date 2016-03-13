@@ -1,4 +1,3 @@
-
 //Array of locations for markers
 var locations = [
   'Vortex Bar & Grill',
@@ -6,11 +5,12 @@ var locations = [
   'Woodruff Arts Center',
   'World of Coca-Cola',
   'Georgia Dome',
-  'Piedmont Park',
   'Zoo Atlanta',
   'Georgia Aquarium',
-  'Turner Field'
+  'Turner Field',
+  'Chastain Park'
 ];
+
 //sorts array alphabetically
 locations.sort();
 //Array of markers to display
@@ -188,6 +188,7 @@ var mapMarker = function(name) {
     infoWindowObject[mark.name()].open(map, markerObject[mark.name()]);
   };
 };
+
 //View
 var ViewModel = function() {
   var self = this;
@@ -198,8 +199,8 @@ var ViewModel = function() {
   this.filter = ko.observable('');
   //filters locations by filter observable
   this.filterLocations = function() {
+	this.mapMarkerList.removeAll();
 	if(self.filter().length > 0) {
-	  this.mapMarkerList.removeAll();
 	  locations.forEach(function(name) {
         if(name.toLowerCase().search(self.filter().toLowerCase()) > -1) {
 		  self.mapMarkerList.push(new mapMarker(name));
@@ -211,7 +212,6 @@ var ViewModel = function() {
       });
 	}
 	else {
-	  this.mapMarkerList.removeAll();
 	  locations.forEach(function(name) {
         self.mapMarkerList.push(new mapMarker(name));
 		markerObject[name].setMap(map);
