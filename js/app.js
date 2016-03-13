@@ -13,8 +13,6 @@ var locations = [
 
 //sorts array alphabetically
 locations.sort();
-//Array of markers to display
-var locationsDisplay = locations.slice(0);
 // declares a global map variable
 var map;
 // declares object array of markers
