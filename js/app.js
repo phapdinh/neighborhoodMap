@@ -1,3 +1,4 @@
+
 //Array of locations for markers
 var locations = [
   'Vortex Bar & Grill',
@@ -82,7 +83,7 @@ function initializeMap() {
 		var artc = articles[i];
 		var web_url = 'https://en.wikipedia.org/wiki/' + artc;
 		infoContent = infoContent + '<br>' +
-		'<a href="'+ web_url +'">' +
+		'<a href="'+ web_url +'" target="_blank">' +
 		artc +'</a>';
 	  }
 	  // infoWindows are the little helper windows that open when you click
