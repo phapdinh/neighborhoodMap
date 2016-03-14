@@ -191,7 +191,7 @@ var mapMarker = function(name) {
 var ViewModel = function() {
   var self = this;
   this.mapMarkerList = ko.observableArray([]);
-  locations.forEach(function(name) {
+  Object.keys(markerObject).forEach(function(name) {
     self.mapMarkerList.push(new mapMarker(name));
   });
   this.filter = ko.observable('');
@@ -199,7 +199,7 @@ var ViewModel = function() {
   this.filterLocations = function() {
 	this.mapMarkerList.removeAll();
 	if(self.filter().length > 0) {
-	  locations.forEach(function(name) {
+	  Object.keys(markerObject).forEach(function(name) {
         if(name.toLowerCase().search(self.filter().toLowerCase()) > -1) {
 		  self.mapMarkerList.push(new mapMarker(name));
 		  markerObject[name].setMap(map);
@@ -210,7 +210,7 @@ var ViewModel = function() {
       });
 	}
 	else {
-	  locations.forEach(function(name) {
+	  Object.keys(markerObject).forEach(function(name) {
         self.mapMarkerList.push(new mapMarker(name));
 		markerObject[name].setMap(map);
       });
