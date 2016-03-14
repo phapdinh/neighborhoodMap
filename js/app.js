@@ -191,7 +191,7 @@ var mapMarker = function(name) {
 var ViewModel = function() {
   var self = this;
   this.mapMarkerList = ko.observableArray([]);
-  Object.keys(markerObject).forEach(function(name) {
+  locations.forEach(function(name) {
     self.mapMarkerList.push(new mapMarker(name));
   });
   this.filter = ko.observable('');
