@@ -7,7 +7,8 @@ var locations = [
   'Georgia Dome',
   'Zoo Atlanta',
   'Georgia Aquarium',
-  'Turner Field'
+  'Turner Field',
+  'Fernbank Museum of Natural History IMAX'
 ];
 
 //sorts array alphabetically
@@ -96,7 +97,7 @@ function initializeMap() {
 	marker.addListener('click', function() {
 	  //Closes all open info windows
 	  Object.keys(infoWindowObject).forEach(function(name) {
-	  infoWindowObject[name].close();
+	    infoWindowObject[name].close();
 	  });
       infoWindow.open(map, marker);
 	  if (marker.getAnimation() !== null) {
