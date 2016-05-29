@@ -105,7 +105,7 @@ function initializeMap() {
         marker.setAnimation(google.maps.Animation.BOUNCE);
       }
 	  //adds image to background
-	  $("body").css("background-image", 'url("http://maps.googleapis.com/maps/api/streetview?size=600x400&location=' + lat + ', ' + lon +'")');
+	  $("body").append('<img class="bgimg" src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location=' + lat + ', ' + lon +'">');
 	  //sets Timeout to stop marker bounce after 4 seconds
 	  window.setTimeout(function() {
         marker.setAnimation(null);  
