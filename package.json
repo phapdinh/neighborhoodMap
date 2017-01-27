@@ -1,0 +1,25 @@
+{
+  "name": "neighborhood_map",
+  "version": "1.0.0",
+  "description": "search tourist locations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phapdinh/neighborhoodMap.git"
+  },
+  "keywords": [
+    "map"
+  ],
+  "author": "Phap",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phapdinh/neighborhoodMap/issues"
+  },
+  "homepage": "https://github.com/phapdinh/neighborhoodMap#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
